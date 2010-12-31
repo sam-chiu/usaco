@@ -1,3 +1,0 @@
-rm *.in -f
-rm *.out -f
-rm $1 -f
