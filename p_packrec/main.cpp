@@ -67,6 +67,33 @@ class Rect{
       int sort() { 
          return 0; 
       }
+      vector<ResultRect> pullWithoutDuplicates( vector<ResultRect> * rawResults )
+      {
+         vector<ResultRect> ret;
+         for(vector<ResultRect>::iterator ri = rawResults->begin(); ri != rawResults->end(); ri++){
+           if ( ret.empty() )
+           {
+             ret.push_back( *ri );
+             continue;
+           }
+
+           bool found = false;
+           for(vector<ResultRect>::iterator si = ret.begin(); si != ret.end(); si++){
+             if (( si->area.x1 == ri->area.x1 && si->area.y1 == ri->area.y1 )
+               || ( si->area.x1 == ri->area.y1 && si->area.y1 == ri->area.x1 ) )
+             {
+               found = true;
+               break;
+             }
+           }
+           if ( found )
+             continue;
+           else
+             ret.push_back( *ri );
+         }
+         return ret;
+      }
+
       int getMinResult() { 
          int area = 50*4*50;
          vector<ResultRect>*res = &result_vector.at(op_step);
@@ -76,7 +103,8 @@ class Rect{
          }
          std::ofstream fout("packrec.out");
          fout << area << std::endl;
-         for(vector<ResultRect>::iterator ri = res->begin(); ri != res->end(); ri++){
+         vector<ResultRect> deduplicatedResult = pullWithoutDuplicates(res);
+         for(vector<ResultRect>::iterator ri = deduplicatedResult.begin(); ri != deduplicatedResult.end(); ri++){
             if(ri->area.x1 * ri->area.y1 > area) continue;
             //if( ri->area.x1 < ri->area.y1 ) cout<< "PACK_RECT_XY:"<<ri->area.x1<<" "<<ri->area.y1<<endl;
             //else cout<< "PACK_RECT_XY:"<<ri->area.y1<<" "<<ri->area.x1<<endl;
