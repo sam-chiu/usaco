@@ -49,6 +49,11 @@ class ResultRect{
       RectCorxy         area;
       vector<RectCorxy> places;
 };
+bool sortfunc( ResultRect lhs, ResultRect rhs)
+{
+  if ( lhs.area.x1 > rhs.area.x1 ) return true;
+  return false;
+}
 class Rect{
    public:
       Rect(vector<RectXY>& input)
@@ -104,6 +109,7 @@ class Rect{
          std::ofstream fout("packrec.out");
          fout << area << std::endl;
          vector<ResultRect> deduplicatedResult = pullWithoutDuplicates(res);
+         std::sort(deduplicatedResult.begin(),deduplicatedResult.end(), sortfunc);
          for(vector<ResultRect>::iterator ri = deduplicatedResult.begin(); ri != deduplicatedResult.end(); ri++){
             if(ri->area.x1 * ri->area.y1 > area) continue;
             //if( ri->area.x1 < ri->area.y1 ) cout<< "PACK_RECT_XY:"<<ri->area.x1<<" "<<ri->area.y1<<endl;
