@@ -1,6 +1,6 @@
 /*
 ID:wang0101
-PROG:calfflac
+PROG:packrec
 LANG:C++
 */
 #include <fstream>
@@ -76,8 +76,8 @@ class Rect{
          }
          for(vector<ResultRect>::iterator ri = res->begin(); ri != res->end(); ri++){
             if(ri->area.x1 * ri->area.y1 > area) continue;
-            if( ri->area.x1 < ri->area.y1 ) cout<< "PACK_RECT_XY:"<<ri->area.x1<<" "<<ri->area.y1<<endl;
-            else cout<< "PACK_RECT_XY:"<<ri->area.y1<<" "<<ri->area.x1<<endl;
+            //if( ri->area.x1 < ri->area.y1 ) cout<< "PACK_RECT_XY:"<<ri->area.x1<<" "<<ri->area.y1<<endl;
+            //else cout<< "PACK_RECT_XY:"<<ri->area.y1<<" "<<ri->area.x1<<endl;
          } 
          return area; 
       }
@@ -232,7 +232,7 @@ int placeRects(vector<RectXY> input){
    int ret=0;
    //get sort input vector of Rect(x,y)
    vector<RectXY> svRect;
-   cout<<"input rects:"<<endl;
+   //cout<<"input rects:"<<endl;
    vector<RectXY>::iterator i,j;
    for( i = input.begin(); input.end() != i; i++){
 	   if( 0 == svRect.size() ) {
@@ -247,7 +247,7 @@ int placeRects(vector<RectXY> input){
 	   }
 	   cout<<i->x<<" " <<i->y<<"\t";
    }
-      cout<<endl<<"begin sorting them:"<<endl;
+      //cout<<endl<<"begin sorting them:"<<endl;
    for(vector<RectXY>::iterator i = svRect.begin();
        svRect.end() != i;
        i++)  cout<<i->x<<" "<<i->y<<"\t";
@@ -268,7 +268,7 @@ string help = " This is a program to computer minum area of 4 rects \n\
             default parameter:  --file=packrec.in, --out=packrec.out\n\
             where: put rects (x,y) to input.txt                     \n";
 bool readData(){
-  cout<<"read from file:" <<filen.c_str()<<endl;
+  //cout<<"read from file:" <<filen.c_str()<<endl;
   string line;
   ifstream infile(filen.c_str());
   if(infile.is_open()){
@@ -296,7 +296,7 @@ bool readData(){
   return false;
 }
 int main(int argc, char* argv[]){
- cout<<"hello world, this is an algorithm of placing rectangles"<<endl;
+ //cout<<"hello world, this is an algorithm of placing rectangles"<<endl;
  #if 1
    bool bgen = false;
    bool bfile = false;
@@ -325,7 +325,7 @@ int main(int argc, char* argv[]){
     };
 
    }
-    cout << "input param:"<<"file="<<filen.c_str() <<"\tgenerate="<<bgen<<"\tnumOfRects="<<num<<endl;
+    //cout << "input param:"<<"file="<<filen.c_str() <<"\tgenerate="<<bgen<<"\tnumOfRects="<<num<<endl;
     if(bgen){
       cout<<"----begin generate rects:"<<endl;
        genDataFile(filen);
@@ -340,7 +340,7 @@ int main(int argc, char* argv[]){
  #endif 
  #if 1
     vector<RectXY>::iterator iter = in_rect.begin();
-    cout<<"input Rects, size="<<in_rect.size()<<endl;
+    //cout<<"input Rects, size="<<in_rect.size()<<endl;
     while (iter != in_rect.end()){
       cout<<"("<<iter->x<<","<<iter->y<<")\t";
       iter++;
@@ -350,8 +350,8 @@ int main(int argc, char* argv[]){
  #endif 
  //place rectangles:
  int ret = placeRects( in_rect );
- if(ret) cout << "get minum rectangle:"<< ret <<endl;
- else cout <<"oops: need more effort to refactor, don't give up:-)"<<endl;
+ //if(ret) cout << "get minum rectangle:"<< ret <<endl;
+ //else cout <<"oops: need more effort to refactor, don't give up:-)"<<endl;
  
 return 0;
 }
