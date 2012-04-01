@@ -74,10 +74,20 @@ class Rect{
            int square = res->at(i).area.x1 * res->at(i).area.y1;
            if( area > square ) area = square; 
          }
+         std::ofstream fout("packrec.out");
+         fout << area << std::endl;
          for(vector<ResultRect>::iterator ri = res->begin(); ri != res->end(); ri++){
             if(ri->area.x1 * ri->area.y1 > area) continue;
             //if( ri->area.x1 < ri->area.y1 ) cout<< "PACK_RECT_XY:"<<ri->area.x1<<" "<<ri->area.y1<<endl;
             //else cout<< "PACK_RECT_XY:"<<ri->area.y1<<" "<<ri->area.x1<<endl;
+            if ( ri->area.x1 < ri->area.y1 )
+            {
+              fout << ri->area.x1 << " " << ri->area.y1 << std::endl;
+            }
+            else
+            {
+              fout << ri->area.y1 << " " << ri->area.x1 << std::endl;
+            }
          } 
          return area; 
       }
@@ -164,7 +174,7 @@ class Rect{
              break;
            pn = resulti->places.size();
            for( j = 0; j < pn ;  j++){
-             cout<<"__________debug::pn="<<pn<<" j="<<j<<endl;
+             //cout<<"__________debug::pn="<<pn<<" j="<<j<<endl;
              RectCorxy putit = resulti->places.at(j);
              genNewResults( resulti, &putit, rect );
              if(op_step>0) {
