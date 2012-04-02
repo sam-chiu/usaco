@@ -205,40 +205,48 @@ Rect get_min_bbox(int layout,vector<Rect> combo)
       break;
     case 6:
       {
-        int top_w = sum_x(combo,0,3);
-        int low_w = sum_x(combo,1,2);
-        int most_w = std::max(top_w, low_w);
-        int l_h = sum_y(combo,0,1);
-        int r_h = sum_y(combo,2,3);
-        if ( top_w <= low_w )
+        if ( combo[1].x >= combo[0].x )
         {
-          if (( sum_x(combo,1,3) <=  most_w )
-            || ( combo[2].y >= combo[1].y ))
+          int top_w = combo[0].x + combo[3].x;
+          int low_w = combo[1].x + combo[2].x;
+          int most_w = std::max(top_w, low_w);
+          int l_h = combo[0].y + combo[1].y;
+          int r_h = combo[2].y + combo[3].y;
+          if ( top_w <= low_w )
           {
-            bbox_x = most_w;
-            bbox_y = std::max(l_h,r_h);
+            if (( (combo[1].x + combo[3].x) <=  most_w )
+                || ( combo[2].y >= combo[1].y ))
+            {
+              bbox_x = most_w;
+              bbox_y = std::max(l_h,r_h);
+            }
+            else
+            {
+              int m_h = combo[1].y + combo[3].y;
+              bbox_x = most_w;
+              bbox_y = std::max(l_h,m_h);
+            }
           }
           else
           {
-            int m_h = sum_y(combo,1,3);
-            bbox_x = most_w;
-            bbox_y = std::max(l_h,m_h);
+            if (( (combo[1].x + combo[3].x) <= most_w )
+                || ( combo[2].y >= combo[1].y ))
+            {
+              bbox_x = most_w;
+              bbox_y = std::max(l_h,r_h);
+            }
+            else
+            {
+              int m_h = combo[1].y + combo[3].y;
+              bbox_x = most_w;
+              bbox_y = std::max(l_h,m_h);
+            }
           }
         }
-        else
+        else /* fake */
         {
-          if (( sum_x(combo,0,2) <= most_w )
-            || ( combo[3].y >= combo[0].y ))
-          {
-            bbox_x = most_w;
-            bbox_y = std::max(l_h,r_h);
-          }
-          else
-          {
-            int m_h = sum_y(combo,0,2);
-            bbox_x = most_w;
-            bbox_y = std::max(l_h,m_h);
-          }
+              bbox_x = 1000;
+              bbox_y = 1000;
         }
       }
       break;
@@ -248,7 +256,6 @@ Rect get_min_bbox(int layout,vector<Rect> combo)
 
 void print_combo(vector<Rect> combo)
 {
-  printf("####\e[1;37m\e[41m printing combo: \e[0m####\n");
   for (int i = 0; i < combo.size(); i++) {
     cout << i << ": " << combo[i] << endl;
   }
@@ -262,7 +269,7 @@ void scan_allrects()
     vector<Rect> combo = allrects[i];
     for (int j = 1; j <= 6; j++) {
       Rect bbox = get_min_bbox(j,combo);
-      if ( bbox.area() == 36 )
+      if ( bbox.area() == 750 )
       {
         printf("####\e[1;37m\e[41m j:%d  \e[0m####\n", 
             j );
@@ -282,8 +289,7 @@ void scan_allrects()
       }
     }
   }
-  //printf("####\e[1;37m\e[41m min area:%d \e[0m####\n", 
-      //min_area);
+  printf("####\e[1;37m\e[41m min area:%d \e[0m####\n", min_area);
 }
 
 void print_results()
@@ -357,14 +363,12 @@ int main(int argc, const char *argv[])
   scan_allrects();
   //print_results();
   normalize_results();
-  //printf("####\e[1;37m\e[41m final \e[0m####\n");
   vector<Rect> newresults = dedup_results();
 
   ofstream fout("packrec.out");
   for (int i = 0; i < newresults.size(); i++) {
     if (i==0)
       fout << newresults[i].area() << endl;
-    //cout << newresults[i] << endl;
     fout << newresults[i];
   }
 
